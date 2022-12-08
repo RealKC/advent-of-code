@@ -65,7 +65,6 @@ impl File {
 }
 
 fn main() {
-    println!("Hello, world!");
     let mut lines = INPUT.lines();
     lines.next(); // skip the "cd /" line
 
