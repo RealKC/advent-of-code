@@ -1,3 +1,5 @@
+use std::iter::once;
+
 use chumsky::{
     error::Simple,
     primitive::{choice, just},
@@ -65,51 +67,33 @@ impl Game {
     }
 
     fn minimum_power(&self) -> u64 {
-        let (red, green, blue) = self.sets.iter().fold(
-            (Colour::Red(0), Colour::Green(0), Colour::Blue(0)),
-            |acc, set| {
-                let red = set
-                    .iter()
-                    .filter(|c| matches!(c, Colour::Red(_)))
-                    .map(|c| {
-                        if let Colour::Red(val) = c {
-                            Colour::Red(*val.max(&acc.0.value()))
-                        } else {
-                            acc.0
-                        }
-                    })
-                    .nth(0)
-                    .unwrap_or(acc.0);
-                let green = set
-                    .iter()
-                    .filter(|c| matches!(c, Colour::Green(_)))
-                    .map(|c| {
-                        if let Colour::Green(val) = c {
-                            Colour::Green(*val.max(&acc.1.value()))
-                        } else {
-                            acc.1
-                        }
-                    })
-                    .nth(0)
-                    .unwrap_or(acc.1);
-                let blue = set
-                    .iter()
-                    .filter(|c| matches!(c, Colour::Blue(_)))
-                    .map(|c| {
-                        if let Colour::Blue(val) = c {
-                            Colour::Blue(*val.max(&acc.2.value()))
-                        } else {
-                            acc.2
-                        }
-                    })
-                    .nth(0)
-                    .unwrap_or(acc.2);
+        let (red, green, blue) = self.sets.iter().fold((0, 0, 0), |acc, set| {
+            let red = set
+                .iter()
+                .filter(|c| matches!(c, Colour::Red(_)))
+                .map(|c| c.value())
+                .chain(once(acc.0))
+                .max()
+                .unwrap();
+            let green = set
+                .iter()
+                .filter(|c| matches!(c, Colour::Green(_)))
+                .map(|c| c.value())
+                .chain(once(acc.1))
+                .max()
+                .unwrap();
+            let blue = set
+                .iter()
+                .filter(|c| matches!(c, Colour::Blue(_)))
+                .map(|c| c.value())
+                .chain(once(acc.2))
+                .max()
+                .unwrap();
 
-                (red, green, blue)
-            },
-        );
+            (red, green, blue)
+        });
 
-        red.value() * green.value() * blue.value()
+        red * green * blue
     }
 }
 
