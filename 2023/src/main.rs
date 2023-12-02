@@ -1,6 +1,7 @@
 use std::env;
 
 mod day1;
+mod day2;
 
 fn main() {
     let Some(day) = env::args().nth(1) else {
@@ -10,6 +11,7 @@ fn main() {
 
     match day.as_ref() {
         "day1" => day1::solution(),
+        "day2" => day2::solution(),
         day => eprintln!("Unimplemented solution for day {day}"),
     }
 }
