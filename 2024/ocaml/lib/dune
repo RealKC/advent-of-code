@@ -1,3 +1,5 @@
 (library
  (public_name ocaml)
+ (preprocess
+  (pps ppx_deriving.show))
  (name solutions))
