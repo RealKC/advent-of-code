@@ -12,6 +12,7 @@ let () =
     let out =
       match (day, part) with
       | "4", "a" -> Solutions.Day4.solve_a input
+      | "4", "b" -> Solutions.Day4.solve_b input
       | _ -> Printf.sprintf "Day %s part %s was not solved in OCaml\n" day part
     in
     print_endline ("Solution was " ^ out)

@@ -1,23 +1,26 @@
-let solve_a input =
+let parse input =
   let lines = String.split_on_char '\n' input in
+  let to_array s = Array.init (String.length s) (fun idx -> String.get s idx) in
   let parsed =
-    let to_array s =
-      Array.init (String.length s) (fun idx -> String.get s idx)
-    in
     Array.init (List.length lines) (fun idx -> to_array (List.nth lines idx))
   in
+  let at i j pred =
+    if i >= Array.length parsed || i < 0 then false
+    else
+      let line = parsed.(i) in
+      if j >= Array.length line || j < 0 then false else pred line.(j)
+  in
+  (parsed, at)
+
+let eq = ( == )
+
+let solve_a input =
+  let parsed, at = parse input in
   let total = ref 0 in
   let i = ref 0 in
   while !i < Array.length parsed do
     let j = ref 0 in
     while !j < Array.length (Array.get parsed !i) do
-      let at i j pred =
-        if i >= Array.length parsed || i < 0 then false
-        else
-          let line = parsed.(i) in
-          if j >= Array.length line || j < 0 then false else pred line.(j)
-      in
-      let eq = ( == ) in
       let line_right =
         at !i !j (eq 'X')
         && at !i (!j + 1) (eq 'M')
@@ -83,6 +86,32 @@ let solve_a input =
         List.fold_left (fun e acc -> e + acc) 0 (List.map int_of_bool conds)
       in
       total := !total + count;
+      j := !j + 1
+    done;
+    i := !i + 1
+  done;
+  string_of_int !total
+
+let solve_b input =
+  let parsed, at = parse input in
+  let total = ref 0 in
+  let i = ref 0 in
+  while !i < Array.length parsed do
+    let j = ref 0 in
+    while !j < Array.length (Array.get parsed !i) do
+      if at !i !j (eq 'A') then
+        let main_diagonal ch1 ch2 =
+          at (!i - 1) (!j - 1) (eq ch1) && at (!i + 1) (!j + 1) (eq ch2)
+        in
+        let anti_diagonal ch1 ch2 =
+          at (!i - 1) (!j + 1) (eq ch1) && at (!i + 1) (!j - 1) (eq ch2)
+        in
+        let msms = main_diagonal 'M' 'S' && anti_diagonal 'S' 'M' in
+        let ssmm = main_diagonal 'S' 'M' && anti_diagonal 'S' 'M' in
+        let smsm = main_diagonal 'S' 'M' && anti_diagonal 'M' 'S' in
+        let mmss = main_diagonal 'M' 'S' && anti_diagonal 'M' 'S' in
+        if msms || ssmm || smsm || mmss then total := !total + 1 else ()
+      else ();
       j := !j + 1
     done;
     i := !i + 1
