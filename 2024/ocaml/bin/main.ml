@@ -15,6 +15,8 @@ let () =
       | "4", "b" -> Solutions.Day4.solve_b input
       | "5", "a" -> Solutions.Day5.solve_a input
       | "5", "b" -> Solutions.Day5.solve_b input
+      | "6", "a" -> Solutions.Day6.solve_a input
+      | "6", "b" -> Solutions.Day6.solve_b input
       | _ -> Printf.sprintf "Day %s part %s was not solved in OCaml\n" day part
     in
     print_endline ("Solution was " ^ out)
