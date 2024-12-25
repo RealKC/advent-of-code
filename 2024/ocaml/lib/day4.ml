@@ -1,3 +1,5 @@
+open Utils
+
 let parse input =
   let lines = String.split_on_char '\n' input in
   let to_array s = Array.init (String.length s) (fun idx -> String.get s idx) in
@@ -82,7 +84,6 @@ let solve_a input =
         ]
       in
       let count =
-        let int_of_bool b = if b then 1 else 0 in
         List.fold_left (fun e acc -> e + acc) 0 (List.map int_of_bool conds)
       in
       total := !total + count;
