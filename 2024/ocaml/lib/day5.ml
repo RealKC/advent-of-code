@@ -1,9 +1,11 @@
+open Utils
+
 let parse input =
   let lines = String.split_on_char '\n' input in
   let raw_rules, raw_updates =
     List.partition
       (fun x -> String.contains x '|')
-      (List.filter (fun x -> String.length x > 0) lines)
+      (List.filter (fun x -> not (String.is_empty x)) lines)
   in
   let updates =
     List.map
