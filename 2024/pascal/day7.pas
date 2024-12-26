@@ -140,7 +140,6 @@ var
   InputData: DataDict;
   i: integer;
   Tree: EquationTree;
-  Prev: uint64;
   IsValid: boolean;
 begin
   InputData := Parse(input);
@@ -149,13 +148,7 @@ begin
   begin
     Tree := BuildEquationTree(0, InputData.Data[i], Root);
     IsValid := IsValidEquationB(Tree, InputData.Keys[i]);
-    if isValid then
-    begin
-      Prev := Result;
-      Result := Result + InputData.Keys[i];
-      if Prev > Result then
-        WriteLn(Format('OVERFLOW! prev=%d, result=%d', [prev, Result]));
-    end;
+    if isValid then Result := Result + InputData.Keys[i];
   end;
 end;
 
